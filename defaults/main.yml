@@ -3,6 +3,9 @@
 
   role_dir: "{{ role_path }}"
 
+  php_fpm_user: www-data
+  php_fpm_group: www-data
+
   php_family: default # 5.4 | 5.5 | 5.6 | 7.0 | default
 
   php_module_prefix: php
@@ -23,3 +26,9 @@
     - "{{php_module_prefix}}-gd"
 
   timezone: Europe/London
+
+  default_pool_properties:
+    - {regexp: "^[;]?listen.owner *", line: "listen.owner  = {{php_fpm_user}}"}
+    - {regexp: "^[;]?listen.group *", line: "listen.group  = {{php_fpm_group}}"}
+
+  custom_pool_properties: []

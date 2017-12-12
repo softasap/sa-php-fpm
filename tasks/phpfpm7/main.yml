@@ -5,3 +5,24 @@
     become: yes
     tags:
       - phpfpm
+
+  - name: FPM | Patch default settings /etc/php/7.0/fpm/pool.d/www.conf
+    lineinfile: dest=/etc/php/7.0/fpm/pool.d/www.conf  regexp="{{item.regexp}}" line="{{item.line}}" insertafter="{{item.insertafter | default('EOF')}}"
+    with_items: "{{default_pool_properties | default([])}}"
+    become: yes
+    tags:
+      - phpfpm
+
+  - name: FPM | Patch custom settings /etc/php/7.0/fpm/pool.d/www.conf
+    lineinfile: dest=/etc/php/7.0/fpm/pool.d/www.conf  regexp="{{item.regexp}}" line="{{item.line}}" insertafter="{{item.insertafter | default('EOF')}}"
+    with_items: "{{custom_pool_properties | default([])}}"
+    become: yes
+    tags:
+      - phpfpm
+
+  - name: FPM | Force restart fpm service
+    service: name="php7.0-fpm" state="restarted"
+    with_items: "{{custom_pool_properties | default([])}}"
+    become: yes
+    tags:
+      - phpfpm
