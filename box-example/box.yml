@@ -68,11 +68,28 @@
 
       - {
          role: "sa-php-fpm",
+         php_family: "5.6",
+         php_fpm_group: "nginx",
+         tags: [update]
+        }
+
+      - {
+         role: "sa-php-fpm",
          php_family: default, # 5.4 | 5.5 | 5.6 | 7.0  default
          php_fpm_group: "nginx",
          tags: [update]
         }
 
+      - {
+         role: "sa-php-fpm",
+         php_family: hhvm, # 5.4 | 5.5 | 5.6 | 7.0  default
+         php_fpm_group: "nginx",
+         tags: [update]
+        }
+
+
   tasks:
-     - import_tasks: components/create_demo_site7.yml
+     - include_tasks: components/create_demo_site7.yml
+     - include_tasks: components/create_demo_site56.yml
+     - include_tasks: components/create_demo_sitehhvm.yml
        tags: always
