@@ -1,0 +1,7 @@
+---
+
+  - name: FPM | Install base fpm package module
+    package: name="{{php_fpm_prefix}}-fpm" state="present"
+    become: yes
+    tags:
+      - phpfpm

@@ -1,0 +1,5 @@
+---
+# tasks file for sa-php-fpm
+  - import_tasks: php_switchversion.yml
+
+  - include_tasks: "phpfpm{{php_version}}/main.yml"

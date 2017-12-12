@@ -1,0 +1,30 @@
+
+  - name: PHP | Fix php family prefix
+    set_fact:
+      php_version: 7
+      php_module_prefix: "php7"
+      php_fpm_prefix: "php7.0"
+    when: php_family == "default"
+    tags:
+      -php
+      -setup
+
+  - name: PHP | Fix php family prefix
+    set_fact:
+      php_version: 56
+      php_module_prefix: "php5.6"
+      php_fpm_prefix: "php56"
+    when: php_family == "5.6"
+
+
+  - name: PHP | Add apt repository for php 5.6
+    apt_repository: repo='ppa:ondrej/php'
+    when: php_family == "5.6" and php_present|failed
+    become: yes
+    tags:
+      -php
+      -setup
+
+  - name: PHP | Default platform provided repository is used
+    debug: msg="Default platform available debs will be used for php."
+    when: (php_family is not defined) or (php_family == "default")

@@ -1,0 +1,25 @@
+---
+# defaults file for sa-php-fpm
+
+  role_dir: "{{ role_path }}"
+
+  php_family: default # 5.4 | 5.5 | 5.6 | 7.0 | default
+
+  php_module_prefix: php
+  php_fpm_prefix: php
+
+  pkg_dependencies:
+    - git
+    - curl
+    - python-dev
+    - libmysqlclient-dev
+    - unzip
+
+  php_extensions:
+    - "{{php_module_prefix}}-mysql"
+    - "{{php_module_prefix}}-intl"
+    - "{{php_module_prefix}}-xmlrpc"
+    - "{{php_module_prefix}}-curl"
+    - "{{php_module_prefix}}-gd"
+
+  timezone: Europe/London
