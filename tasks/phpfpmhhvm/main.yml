@@ -1,0 +1,51 @@
+---
+  - name: HHVM | get gpg key
+    apt_key: url=http://dl.hhvm.com/conf/hhvm.gpg.key state=present
+    become: yes
+    tags:
+     - hhvm
+
+  - name: HHVM | add deb repository
+    apt_repository: repo='deb https://dl.hhvm.com/ubuntu {{ansible_distribution_release}} main' state=present
+    become: yes
+    tags:
+     - hhvm
+
+  - name: HHVM | install hhvm packages
+    apt: pkg={{ item }} state=latest update_cache=yes force=yes
+    with_items:
+      - hhvm
+    become: yes
+    notify: restart hhvm
+    tags:
+     - hhvm
+
+  - name: HHVM | get hhvm install path realtime
+    command: which hhvm
+    register: hhvm_path
+    tags:
+     - hhvm
+
+  - name: HHVM | Console operations - symlink hhvm as php
+    file: src="{{ hhvm_path.stdout }}" dest=/usr/bin/phphhvm state=link
+    become: yes
+    tags:
+     - hhvm
+
+  - name: HHVM | Template hhvm service
+    template: src="{{role_dir}}/templates/hhvm/hhvm-fastcgi.service.j2" dest="/etc/systemd/system/hhvm-fastcgi.service"
+    become: yes
+    tags:
+     - hhvm
+
+  - name: HHVM | Enable hhvm service
+    service: name="hhvm-fastcgi" state="stopped"
+    become: yes
+    tags:
+     - hhvm
+
+  - name: HHVM | Enable hvvm service
+    service: name="hvvm-fastcgi" state="started" enabled="yes"
+    become: yes
+    tags:
+     - hhvm
