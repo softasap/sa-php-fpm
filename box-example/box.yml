@@ -63,6 +63,7 @@
         }
       - {
            role: "sa-nginx",
+           nginx_groups: ["www-data"],
            tags: [create]
         }
 
