@@ -32,20 +32,31 @@
     tags:
      - hhvm
 
+  - name: FPM | Patch default settings /etc/hhvm/server.ini
+    lineinfile: dest=/etc/hhvm/server.ini  regexp="{{item.regexp}}" line="{{item.line}}" insertafter="{{item.insertafter | default('EOF')}}"
+    with_items:
+        - {
+            regexp : "^[;]?hhvm.server.port *",
+            line: ";hhvm.server.port = 9000"
+          }
+        - {
+            regexp: "^[;]?hhvm.server.file_socket *",
+            line: "hhvm.server.file_socket = /var/run/hhvm/hhvm.sock",
+            insertafter: "^[;]?hhvm.server.port*"
+          }
+    when: php_fpm_listen is defined and php_fpm_listen == "sock"
+    become: yes
+    tags:
+     - hhvm
+
   - name: HHVM | Template hhvm service
-    template: src="{{role_dir}}/templates/hhvm/hhvm-fastcgi.service.j2" dest="/etc/systemd/system/hhvm-fastcgi.service"
+    template: src="{{role_dir}}/templates/hhvm/phphhvm-fpm.service.j2" dest="/etc/systemd/system/phphhvm-fpm.service"
     become: yes
     tags:
      - hhvm
 
-  - name: HHVM | Enable hhvm service
-    service: name="hhvm-fastcgi" state="stopped"
-    become: yes
-    tags:
-     - hhvm
-
-  - name: HHVM | Enable hvvm service
-    service: name="hvvm-fastcgi" state="started" enabled="yes"
+  - name: HHVM | Start and enable hhvm fastcgi service
+    service: name="phphhvm-fpm" state="restarted" enabled="yes"
     become: yes
     tags:
      - hhvm

@@ -1,6 +1,7 @@
 ---
 # handlers file
 
-  - name: HHVM | restart hhvm
-    action: service name=hhvm-fastcgi state=restarted enabled=yes
+  - name: restart hhvm
+    action: service name=phphhvm-fpm state=restarted enabled=yes
+    become: yes
     when: docker_test is not defined
