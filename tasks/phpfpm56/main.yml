@@ -28,8 +28,7 @@
       - phpfpm
 
   - name: FPM | Force restart fpm service
-    service: name="php5.6-fpm" state="started"
-    with_items: "{{custom_pool_properties | default([])}}"
+    service: name="php5.6-fpm" state="restarted"
     become: yes
     tags:
       - phpfpm

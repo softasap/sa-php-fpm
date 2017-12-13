@@ -1,20 +1,20 @@
 [Unit]
 Description=HHVM HipHop Virtual Machine (FCGI)
-After=network.target nginx.service mariadb.service
+After=network.target
 
 [Service]
+Group={{php_fpm_group}}
 
 PIDFile=/var/run/hhvm/hhvm.pid
 ExecStartPre=/bin/mkdir -p /var/log/hhvm/
 ExecStartPre=/bin/chown -R {{php_fpm_user}}:{{php_fpm_group}} /var/log/hhvm/
 ExecStartPre=/bin/mkdir -p /var/run/hhvm/
 ExecStartPre=/bin/chown -R {{php_fpm_user}}:{{php_fpm_group}} /var/run/hhvm/
+ExecStartPre=/bin/mkdir -p /var/cache/hhvm/
+ExecStartPre=/bin/chown -R {{php_fpm_user}}:{{php_fpm_group}} /var/cache/hhvm/
 ExecStop=rm /var/run/hhvm.pid
 
-# User={{php_fpm_user}}
-# Group={{php_fpm_group}}
-
-ExecStart=/usr/local/bin/hhvm --config /etc/hhvm/server.ini --user {{php_fpm_user}} --mode daemon -vServer.Type=fastcgi -vServer.FileSocket=/var/run/hhvm/hhvm.sock
+ExecStart=/usr/bin/phphhvm --config /etc/hhvm/server.ini --mode daemon --user {{php_fpm_user}}
 
 [Install]
 WantedBy=multi-user.target

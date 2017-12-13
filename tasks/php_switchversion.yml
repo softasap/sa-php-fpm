@@ -18,9 +18,8 @@
 
   - name: PHP | Fix php family prefix for hvvm
     set_fact:
-      php_version: hvvm
-    when: php_family == "hvvm"
-
+      php_version: hhvm
+    when: php_family == "hhvm"
 
 
   - name: PHP | Add apt repository for php 5.6
