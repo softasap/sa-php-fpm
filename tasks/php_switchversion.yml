@@ -1,7 +1,7 @@
 
   - name: PHP | Fix php family prefix for 7
     set_fact:
-      php_version: 7
+      php_version: "7.0"
       php_module_prefix: "php7"
       php_fpm_prefix: "php7.0"
     when: php_family == "default"
@@ -11,7 +11,7 @@
 
   - name: PHP | Fix php family prefix for 5.6
     set_fact:
-      php_version: 56
+      php_version: "5.6"
       php_module_prefix: "php5.6"
       php_fpm_prefix: "php5.6"
     when: php_family == "5.6"

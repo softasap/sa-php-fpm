@@ -19,6 +19,48 @@ Simple
 
 ```
 
+Advanced
+
+see box-example for full featured lamp install.
+
+```YAML
+
+     - {
+         role: "sa-php-fpm",
+         option_install_xdebug: true,
+         php_xdebug_version: 2.5.5,
+
+         php_fpm_user: www-data,
+         php_fpm_group: www-data,
+
+         php_fpm_listen: sock, # tcp 9000 to support. and both
+         php_family: default, #  5.6 | 7.0 | hhvm | default
+
+         pkg_dependencies:
+           - git
+           - curl
+           - python-dev
+           - libmysqlclient-dev
+           - unzip
+
+         php_extensions:
+           - "{{php_module_prefix}}-mysql"
+           - "{{php_module_prefix}}-intl"
+           - "{{php_module_prefix}}-xmlrpc"
+           - "{{php_module_prefix}}-curl"
+           - "{{php_module_prefix}}-gd"
+
+         timezone: "Europe/London",
+
+         custom_pool_properties:
+           - {regexp: "^[;]?listen.owner *", line: "listen.owner  = {{php_fpm_user}}"}
+           - {regexp: "^[;]?listen.group *", line: "listen.group  = {{php_fpm_group}}"}
+
+       }
+
+
+```
+
 
 Usage with ansible galaxy workflow
 ----------------------------------

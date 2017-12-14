@@ -3,3 +3,6 @@
   - import_tasks: php_switchversion.yml
 
   - include_tasks: "phpfpm{{php_version}}/main.yml"
+
+  - include_tasks: "tasks_xdebug.yml"
+    when: option_install_xdebug
