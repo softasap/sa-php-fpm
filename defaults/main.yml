@@ -4,6 +4,7 @@
   role_dir: "{{ role_path }}"
 
   option_install_xdebug: false
+  php_xdebug_version: 2.5.5
 
   php_fpm_user: www-data
   php_fpm_group: www-data
@@ -14,21 +15,23 @@
 
   php_module_prefix: php
   php_fpm_prefix: php
-  php_binary: /usr/bin/php
 
-  pkg_dependencies:
+  pkg_dependencies_core:
     - git
     - curl
-    - python-dev
     - libmysqlclient-dev
     - unzip
 
-  php_extensions:
+  pkg_dependencies: []
+
+  php_extensions_core:
     - "{{php_module_prefix}}-mysql"
     - "{{php_module_prefix}}-intl"
     - "{{php_module_prefix}}-xmlrpc"
     - "{{php_module_prefix}}-curl"
     - "{{php_module_prefix}}-gd"
+
+  php_extensions: []
 
   timezone: Europe/London
 
@@ -37,5 +40,3 @@
     - {regexp: "^[;]?listen.group *", line: "listen.group  = {{php_fpm_group}}"}
 
   custom_pool_properties: []
-
-  php_xdebug_version: 2.5.5
