@@ -77,15 +77,15 @@
 
       - {
          role: "sa-php-fpm",
-         php_family: default, # 5.4 | 5.5 | 5.6 | 7.0  default
+         php_family: default, # 5.6 | 7.0 | hhvm |  default
          php_fpm_group: "nginx",
-         option_install_xdebug: true,         
+         option_install_xdebug: true,
          tags: [update]
         }
 
       - {
          role: "sa-php-fpm",
-         php_family: hhvm, # 5.4 | 5.5 | 5.6 | 7.0  default
+         php_family: hhvm, # 5.6 | 7.0 | hhvm |  default
          php_fpm_group: "nginx",
          tags: [update]
         }
