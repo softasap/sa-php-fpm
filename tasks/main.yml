@@ -6,3 +6,5 @@
 
   - include_tasks: "tasks_xdebug.yml"
     when: option_install_xdebug
+
+  - include_tasks: "php_additional_extensions.yml"

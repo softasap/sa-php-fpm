@@ -2,7 +2,7 @@
   - name: PHP | Fix php family prefix for 7
     set_fact:
       php_version: "7.0"
-      php_module_prefix: "php7"
+      php_module_prefix: "php7.0"
       php_fpm_prefix: "php7.0"
     when: php_family == "default"
     tags:
