@@ -3,7 +3,7 @@ sa-php-fpm
 [![Build Status](https://travis-ci.org/softasap/sa-php-fpm.svg?branch=master)](https://travis-ci.org/softasap/sa-php-fpm)
 
 
-Basic role for php-fpm install
+Basic role for php-fpm install, optional pre-configured xdebug support, optional global composer installation as composer{{php_version}}
 
 
 Example of usage:
@@ -29,6 +29,8 @@ see box-example for full featured lamp install.
          role: "sa-php-fpm",
          option_install_xdebug: true,
          php_xdebug_version: 2.5.5,
+
+         option_install_composer: true,         
 
          php_fpm_user: www-data,
          php_fpm_group: www-data,
