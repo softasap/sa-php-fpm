@@ -6,6 +6,8 @@
   option_install_xdebug: false
   php_xdebug_version: 2.5.5
 
+  option_install_composer: true
+
   php_fpm_user: www-data
   php_fpm_group: www-data
 
