@@ -29,6 +29,12 @@ see box-example for full featured lamp install.
          role: "sa-php-fpm",
          option_install_xdebug: true,
          php_xdebug_version: 2.5.5,
+         xdebug_remote_enable: 1
+         # IMPORTANT - SETTING BELOW TO 1 ON PROD SERVERS RESULTS TO EXPLOIT
+         # AS  xdebug_remote_host is ignored
+         xdebug_remote_connect_back: 0
+         xdebug_remote_host: "127.0.0.1"
+
 
          option_install_composer: true,         
 
