@@ -40,6 +40,7 @@
   default_pool_properties:
     - {regexp: "^[;]?listen.owner *", line: "listen.owner  = {{php_fpm_user}}"}
     - {regexp: "^[;]?listen.group *", line: "listen.group  = {{php_fpm_group}}"}
+    - {regexp: "^[;]?pm.status_path*", line: "pm.status_path = /status"}
 
   custom_pool_properties: []
 
