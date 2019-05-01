@@ -1,5 +1,5 @@
 - name: XDebug | dependencies
-  apt: state=present pkg="php{{php_version}}-dev"
+  apt: state=present pkg="php{{ php_version }}-dev"
   become: yes
   tags:
     -xdebug
@@ -11,13 +11,13 @@
     -xdebug
 
 - name: XDebug | Detect module path
-  shell: "echo `/usr/bin/php{{php_version}} -i | grep extension_dir | awk '{print $(NF)}'`"
+  shell: "echo `/usr/bin/php{{ php_version }} -i | grep extension_dir | awk '{print $(NF)}'`"
   register: php_module_path
   tags:
     -xdebug
 
 - name: XDebug | Detect ini path
-  shell: echo `/usr/bin/php{{php_version}} -i | grep "Scan this dir for additional .ini files" | awk '{print $(NF)}'`
+  shell: echo `/usr/bin/php{{ php_version }} -i | grep "Scan this dir for additional .ini files" | awk '{print $(NF)}'`
   register: php_extension_conf_path
   tags:
     -xdebug
@@ -75,7 +75,7 @@
     mode: 0644
   with_items:
     - {
-       php_module_path: "{{php_module_path.stdout}}"
+       php_module_path: "{{ php_module_path.stdout }}"
       }
   become: yes
   tags:
@@ -90,7 +90,7 @@
     mode: 0644
   with_items:
     - {
-      php_module_path: "{{php_module_path.stdout}}"
+      php_module_path: "{{ php_module_path.stdout }}"
     }
   become: yes
   tags:
@@ -98,7 +98,7 @@
 
 
 - name: XDebug | Forced fpm restart for the first time
-  service: name="{{php_fpm_prefix}}-fpm" state="restarted"
+  service: name="{{ php_fpm_prefix }}-fpm" state="restarted"
   become: yes
   tags:
     -xdebug

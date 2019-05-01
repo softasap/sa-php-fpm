@@ -1,7 +1,7 @@
 ---
 
   - name: PHP-FPM | Install dependencies for core php extensions
-    apt: pkg={{ item }} state=latest
+    apt: pkg={{ item }} state=present
     with_items: "{{ pkg_dependencies_core | default([]) }}"
     become: yes
     tags:
@@ -9,14 +9,14 @@
 
 
   - name: PHP-FPM | Install core php extensions
-    apt: pkg={{ item }} state=latest
+    apt: pkg={{ item }} state=present
     with_items: "{{ php_extensions_core | default([]) }}"
     become: yes
     tags:
       - php
 
   - name: PHP-FPM | Install dependencies for additional php extensions
-    apt: pkg={{ item }} state=latest
+    apt: pkg={{ item }} state=present
     with_items: "{{ pkg_dependencies | default([]) }}"
     become: yes
     tags:
@@ -24,7 +24,7 @@
 
 
   - name: PHP-FPM | Install additional php extensions
-    apt: pkg={{ item }} state=latest
+    apt: pkg={{ item }} state=present
     with_items: "{{ php_extensions | default([]) }}"
     become: yes
     tags:

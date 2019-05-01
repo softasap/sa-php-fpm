@@ -30,7 +30,8 @@ galaxy_info:
     - php
     - php5
     - php7
-    - php-fpm
+    - phpfpm
+    - fpm
     - lamp
     - lemp
     - ubuntu

@@ -1,21 +1,29 @@
 ---
 
   - name: FPM | Install base fpm package module
-    package: name="{{php_fpm_prefix}}-fpm" state="present"
+    package: name="{{ php_fpm_prefix }}-fpm" state="present"
     become: yes
     tags:
       - phpfpm
 
   - name: FPM | Patch default settings /etc/php/7.0/fpm/pool.d/www.conf
-    lineinfile: dest=/etc/php/7.0/fpm/pool.d/www.conf  regexp="{{item.regexp}}" line="{{item.line}}" insertafter="{{item.insertafter | default('EOF')}}"
-    with_items: "{{default_pool_properties | default([])}}"
+    lineinfile:
+      dest: /etc/php/7.0/fpm/pool.d/www.conf
+      regexp: "{{ item.regexp }}"
+      line: "{{ item.line }}"
+      insertafter: "{{ item.insertafter | default('EOF') }}"
+    with_items: "{{ default_pool_properties | default([]) }}"
     become: yes
     tags:
       - phpfpm
 
   - name: FPM | Patch custom settings /etc/php/7.0/fpm/pool.d/www.conf
-    lineinfile: dest=/etc/php/7.0/fpm/pool.d/www.conf  regexp="{{item.regexp}}" line="{{item.line}}" insertafter="{{item.insertafter | default('EOF')}}"
-    with_items: "{{custom_pool_properties | default([])}}"
+    lineinfile:
+      dest: /etc/php/7.0/fpm/pool.d/www.conf
+      regexp: "{{ item.regexp }}"
+      line: "{{ item.line }}"
+      insertafter: "{{ item.insertafter | default('EOF') }}"
+    with_items: "{{ custom_pool_properties | default([]) }}"
     become: yes
     tags:
       - phpfpm
