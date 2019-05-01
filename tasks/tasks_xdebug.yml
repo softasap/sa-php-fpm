@@ -71,7 +71,7 @@
   become: yes
   tags:
     -xdebug
-    -skip_ansible_lint 
+    -skip_ansible_lint
 
 - name: XDebug | Copy xdebug INI into php.d folder.
   template:
