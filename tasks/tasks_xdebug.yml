@@ -7,8 +7,10 @@
 - name: XDebug | Make temporary directory
   shell: mktemp -d
   register: xdebug_workspace
+  changed_when: False
   tags:
     -xdebug
+    -skip_ansible_lint
 
 - name: XDebug | Detect module path
   shell: "echo `/usr/bin/php{{ php_version }} -i | grep extension_dir | awk '{print $(NF)}'`"
@@ -49,6 +51,7 @@
     - { exec : "make" }
   tags:
     -xdebug
+    -skip_ansible_lint
 
 - name: XDebug | Ensure php module path exists.
   file:
