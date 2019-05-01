@@ -8,7 +8,7 @@
       -php
       -setup
 
-  - name: PHP | Fix php family prefix for 7
+  - name: PHP | Fix php family prefix for 7.1
     set_fact:
       php_version: "7.1"
       php_module_prefix: "php7.1"
@@ -23,7 +23,7 @@
       php_version: "7.0"
       php_module_prefix: "php7.0"
       php_fpm_prefix: "php7.0"
-    when: php_family == "7.0" or php_family == 7
+    when: php_family == "7.0" or php_family == 7  or (php_family == "default" and ansible_distribution_release in ["xenial"])
     tags:
       -php
       -setup
