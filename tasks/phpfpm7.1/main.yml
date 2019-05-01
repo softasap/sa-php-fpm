@@ -6,9 +6,9 @@
     tags:
       - phpfpm
 
-  - name: FPM | Patch default settings /etc/php/7.0/fpm/pool.d/www.conf
+  - name: FPM | Patch default settings /etc/php/7.1/fpm/pool.d/www.conf
     lineinfile:
-      dest: /etc/php/7.0/fpm/pool.d/www.conf
+      dest: /etc/php/7.1/fpm/pool.d/www.conf
       regexp: "{{ item.regexp }}"
       line: "{{ item.line }}"
       insertafter: "{{ item.insertafter | default('EOF') }}"
@@ -17,9 +17,9 @@
     tags:
       - phpfpm
 
-  - name: FPM | Patch custom settings /etc/php/7.0/fpm/pool.d/www.conf
+  - name: FPM | Patch custom settings /etc/php/7.1/fpm/pool.d/www.conf
     lineinfile:
-      dest: /etc/php/7.0/fpm/pool.d/www.conf
+      dest: /etc/php/7.1/fpm/pool.d/www.conf
       regexp: "{{ item.regexp }}"
       line: "{{ item.line }}"
       insertafter: "{{ item.insertafter | default('EOF') }}"
@@ -29,7 +29,7 @@
       - phpfpm
 
   - name: FPM | Force restart fpm service
-    service: name="php7.0-fpm" state="restarted"
+    service: name="php7.1-fpm" state="restarted"
     become: yes
     when: docker_test is not defined
     tags:
