@@ -23,6 +23,7 @@
   - name: HHVM | get hhvm install path realtime
     command: which hhvm
     register: hhvm_path
+    changed_when: False
     tags:
      - hhvm
 

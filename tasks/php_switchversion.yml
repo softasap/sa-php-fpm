@@ -33,7 +33,7 @@
       php_version: "5.6"
       php_module_prefix: "php5.6"
       php_fpm_prefix: "php5.6"
-    when: php_family == "5.6" or php_family == 5.6
+    when: php_family == "5.6" or php_family == 5.6 or (php_family == "default" and ansible_distribution_release in ["trusty"])
 
   - name: PHP | Fix php family prefix for hvvm
     set_fact:
@@ -43,7 +43,7 @@
 
   - name: PHP | Add apt repository for php 5.6
     apt_repository: repo='ppa:ondrej/php'
-    when: php_family == "5.6" or php_family == 5.6
+    when: php_family == "5.6" or php_family == 5.6 or (php_family == "default" and ansible_distribution_release in ["trusty"])
     become: yes
     tags:
       -php

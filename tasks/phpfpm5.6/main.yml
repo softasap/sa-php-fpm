@@ -38,7 +38,7 @@
 
   - name: FPM | Force restart fpm service
     service: name="php5.6-fpm" state="restarted"
-    when: docker_test is not defined     
+    when: docker_test is not defined
     become: yes
     tags:
       - phpfpm

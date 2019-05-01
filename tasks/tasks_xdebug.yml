@@ -15,13 +15,15 @@
   register: php_module_path
   tags:
     -xdebug
+    -skip_ansible_lint
 
 - name: XDebug | Detect ini path
   shell: echo `/usr/bin/php{{ php_version }} -i | grep "Scan this dir for additional .ini files" | awk '{print $(NF)}'`
   register: php_extension_conf_path
+  changed_when: False
   tags:
     -xdebug
-
+    -skip_ansible_lint
 
 - name: XDebug | Download Xdebug
   get_url: url="http://xdebug.org/files/xdebug-{{ php_xdebug_version }}.tgz" dest="{{ xdebug_workspace.stdout }}/xdebug-{{ php_xdebug_version }}.tgz"
@@ -34,6 +36,7 @@
     creates={{ xdebug_workspace.stdout }}/xdebug-{{ php_xdebug_version }}/README
   tags:
     -xdebug
+    -skip_ansible_lint
 
 - name: XDebug | Build Xdebug.
   shell: "{{ item.exec }}"
@@ -41,8 +44,8 @@
     chdir: "{{ xdebug_workspace.stdout }}/xdebug-{{ php_xdebug_version }}"
     creates: "{{ xdebug_workspace.stdout }}/xdebug-{{ php_xdebug_version }}/modules/xdebug.so"
   with_items:
-    - { exec : "/usr/bin/phpize{{php_version}}" }
-    - { exec : "./configure --with-php-config=/usr/bin/php-config{{php_version}}" }
+    - { exec : "/usr/bin/phpize{{ php_version }}" }
+    - { exec : "./configure --with-php-config=/usr/bin/php-config{{ php_version }}" }
     - { exec : "make" }
   tags:
     -xdebug
@@ -65,10 +68,11 @@
   become: yes
   tags:
     -xdebug
+    -skip_ansible_lint 
 
 - name: XDebug | Copy xdebug INI into php.d folder.
   template:
-    src: "{{role_dir}}/templates/php_debug/xdebug.ini.j2"
+    src: "{{ role_dir }}/templates/php_debug/xdebug.ini.j2"
     dest: "{{ php_extension_conf_path.stdout.replace('/cli/','/fpm/') }}/xdebug.ini"
     owner: root
     group: root
@@ -83,7 +87,7 @@
 
 - name: XDebug | Errors to browser
   template:
-    src: "{{role_dir}}/templates/php_debug/devbox.ini.j2"
+    src: "{{ role_dir }}/templates/php_debug/devbox.ini.j2"
     dest: "{{ php_extension_conf_path.stdout.replace('/cli/','/fpm/') }}/devbox.ini"
     owner: root
     group: root
