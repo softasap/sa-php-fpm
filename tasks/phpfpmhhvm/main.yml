@@ -12,9 +12,12 @@
      - hhvm
 
   - name: HHVM | install hhvm packages
-    apt: pkg={{ item }} state=present update_cache=yes force=yes
-    with_items:
-      - hhvm
+    apt:
+      pkg:
+        - hhvm
+      state: present
+      update_cache: yes
+      force: yes
     become: yes
     notify: restart hhvm
     tags:

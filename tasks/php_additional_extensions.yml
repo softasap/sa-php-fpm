@@ -1,31 +1,27 @@
 ---
 
   - name: PHP-FPM | Install dependencies for core php extensions
-    apt: pkg={{ item }} state=present
-    with_items: "{{ pkg_dependencies_core | default([]) }}"
+    apt: pkg={{ pkg_dependencies_core | default([]) }} state=present
     become: yes
     tags:
       - php
 
 
   - name: PHP-FPM | Install core php extensions
-    apt: pkg={{ item }} state=present
-    with_items: "{{ php_extensions_core | default([]) }}"
+    apt: pkg={{ php_extensions_core | default([]) }} state=present
     become: yes
     tags:
       - php
 
   - name: PHP-FPM | Install dependencies for additional php extensions
-    apt: pkg={{ item }} state=present
-    with_items: "{{ pkg_dependencies | default([]) }}"
+    apt: pkg={{ pkg_dependencies | default([]) }} state=present
     become: yes
     tags:
       - php
 
 
   - name: PHP-FPM | Install additional php extensions
-    apt: pkg={{ item }} state=present
-    with_items: "{{ php_extensions | default([]) }}"
+    apt: pkg={{ php_extensions | default([]) }} state=present
     become: yes
     tags:
       - php
