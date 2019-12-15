@@ -4,7 +4,7 @@
   role_dir: "{{ role_path }}"
 
   option_install_xdebug: false
-  php_xdebug_version: 2.5.5
+  php_xdebug_version: 2.9.0
 
   option_install_composer: true
 
