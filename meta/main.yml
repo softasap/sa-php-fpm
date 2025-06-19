@@ -1,27 +1,30 @@
 ---
 galaxy_info:
+  role_name: sa-php-fpm
+  namespace: softasap
   author: vyacheslav voronenko
-  description: standalone role for php installation in fastcgi mode
+  description: Standalone role for PHP-FPM installation in fastcgi mode
   company: http://www.voronenko.info/
   license: MIT
-  min_ansible_version: 2.11.0.0
-  #
+  min_ansible_version: "2.18"
   platforms:
     - name: Ubuntu
       versions:
-#        - trusty
         - xenial
         - bionic
         - focal
         - jammy
         - noble
+    - name: Debian
+      versions:
+        - stretch
+        - buster
+        - bullseye
 
-  galaxy_tags:
+  tags:
     - php
-    - php5
-    - php7
-    - phpfpm
-    - fpm
+    - php-fpm
+    - fastcgi
     - lamp
     - lemp
     - ubuntu
