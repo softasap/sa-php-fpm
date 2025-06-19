@@ -18,17 +18,17 @@
 
 
   pre_tasks:
-    - debug: msg="Pre tasks section"
+    - ansible.builtin.debug: msg="Pre tasks section"
 
     - name: ANSIBLE PYTHON | install python 2
       raw: test -e /usr/bin/python || (apt -qqy update && apt install -qy python-minimal)
-      become: yes
+      become: true
       tags:
         - create
 
     - name:  UNPRIVILEGED USERS | Get acl dependency (ansible unprivileged user operations magic)
-      apt: pkg="acl"
-      become: yes
+      ansible.builtin.apt: pkg="acl"
+      become: true
       tags:
         - create
 
@@ -40,7 +40,7 @@
 
 
     - name: Include environment related variables
-      include_vars: "{{ item }}"
+      ansible.builtin.include_vars: "{{ item }}"
       ignore_errors: true
       with_first_found:
        - "{{env}}_vars.yml"
@@ -92,7 +92,7 @@
 
 
   tasks:
-     - include_tasks: components/create_demo_site7.yml
-     - include_tasks: components/create_demo_site56.yml
-     - include_tasks: components/create_demo_sitehhvm.yml
+     - ansible.builtin.include_tasks: components/create_demo_site7.yml
+     - ansible.builtin.include_tasks: components/create_demo_site56.yml
+     - ansible.builtin.include_tasks: components/create_demo_sitehhvm.yml
        tags: always

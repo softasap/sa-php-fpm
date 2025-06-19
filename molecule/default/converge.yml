@@ -1,0 +1,26 @@
+---
+- name: Converge
+  hosts: all
+
+  pre_tasks:
+    - ansible.builtin.debug: msg="Pre tasks section for {{ ansible_host }}"
+
+    - name: set default facts
+      ansible.builtin.set_fact:
+        remote_ip_address: "{{ ansible_host }}"
+
+    - name: Include default vars
+      ansible.builtin.include_vars: "playbook_vars.yml"
+
+  roles:
+     - {
+        role: "sa-apache"
+       }
+     - {
+        role: "sa-php-fpm",
+        php_family: "8.3"
+       }
+
+#- name: Apply box play
+#  import_playbook: ../../playbook.yml
+
