@@ -6,9 +6,9 @@
   tags:
     - phpfpm
 
-- name: FPM | Patch default settings /etc/php/7.0/fpm/pool.d/www.conf
+- name: FPM | Patch default settings /etc/php/8.2/fpm/pool.d/www.conf
   ansible.builtin.lineinfile:
-    dest: /etc/php/7.0/fpm/pool.d/www.conf
+    dest: /etc/php/8.2/fpm/pool.d/www.conf
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
     insertafter: "{{ item.insertafter | default('EOF') }}"
@@ -17,9 +17,9 @@
   tags:
     - phpfpm
 
-- name: FPM | Patch custom settings /etc/php/7.0/fpm/pool.d/www.conf
+- name: FPM | Patch custom settings /etc/php/8.0/fpm/pool.d/www.conf
   ansible.builtin.lineinfile:
-    dest: /etc/php/7.0/fpm/pool.d/www.conf
+    dest: /etc/php/8.2/fpm/pool.d/www.conf
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
     insertafter: "{{ item.insertafter | default('EOF') }}"
@@ -30,7 +30,7 @@
 
 - name: FPM | Stop fpm service if custom pool properties exist
   ansible.builtin.service:
-    name: "php7.0-fpm"
+    name: "php8.2-fpm"
     state: stopped
   when: custom_pool_properties is defined
   become: true
@@ -39,7 +39,7 @@
 
 - name: FPM | Restart fpm service
   ansible.builtin.service:
-    name: "php7.0-fpm"
+    name: "php8.2-fpm"
     state: restarted
   when: docker_test is not defined
   become: true

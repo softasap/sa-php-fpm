@@ -1,0 +1,5 @@
+#collections:
+#  - name: community.general
+#    version: 10.5.0
+roles:
+  - name: softasap.sa-apache
