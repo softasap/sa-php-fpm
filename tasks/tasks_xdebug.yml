@@ -82,14 +82,12 @@
 - name: XDebug | Copy xdebug INI into php.d folder.
   ansible.builtin.template:
     src: "{{ role_dir }}/templates/php_debug/xdebug.ini.j2"
-    dest: "{{ php_extension_conf_path.stdout.replace('/cli/','/fpm/') }}/xdebug.ini"
+    dest: "{{ php_extension_conf_path.stdout.replace('/cli/', '/fpm/') }}/xdebug.ini"
     owner: root
     group: root
     mode: "0644"
   with_items:
-    - {
-       php_module_path: "{{ php_module_path.stdout }}"
-      }
+    - php_module_path: "{{ php_module_path.stdout }}"
   become: true
   tags:
     - xdebug
@@ -102,9 +100,7 @@
     group: root
     mode: "0644"
   with_items:
-    - {
-      php_module_path: "{{ php_module_path.stdout }}"
-    }
+    - php_module_path: "{{ php_module_path.stdout }}"
   become: true
   tags:
     - xdebug

@@ -10,16 +10,13 @@
         remote_ip_address: "{{ ansible_host }}"
 
     - name: Include default vars
-      ansible.builtin.include_vars: "playbook_vars.yml"
+      ansible.builtin.include_vars: "vars/playbook_vars.yml"
 
   roles:
-     - {
-        role: "sa-apache"
-       }
-     - {
-        role: "sa-php-fpm",
+    - role: "sa-apache"
+    - role: "sa-php-fpm"
+      vars:
         php_family: "8.3"
-       }
 
 #- name: Apply box play
 #  import_playbook: ../../playbook.yml
