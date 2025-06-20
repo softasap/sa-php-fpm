@@ -1,10 +1,8 @@
 ---
-dependencies: []
-
 galaxy_info:
-  role_name: sa-php-fpm
+  role_name: sa_php_fpm
   namespace: softasap
-  standalone: true
+#  standalone: true
   author: vyacheslav voronenko
   description: Standalone role for PHP-FPM installation in fastcgi mode
   company: http://www.voronenko.info/
@@ -25,8 +23,9 @@ galaxy_info:
         - buster
         - bullseye
   galaxy_tags:
-    - php
+    - application
     - phpfpm
     - fastcgi
     - lamp
     - lemp
+dependencies: []
