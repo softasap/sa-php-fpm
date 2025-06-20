@@ -22,10 +22,5 @@ galaxy_info:
         - stretch
         - buster
         - bullseye
-  galaxy_tags:
-    - application
-    - phpfpm
-    - fastcgi
-    - lamp
-    - lemp
+  galaxy_tags: []
 dependencies: []
