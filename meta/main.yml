@@ -7,7 +7,7 @@ galaxy_info:
   description: Standalone role for PHP-FPM installation in fastcgi mode
   company: http://www.voronenko.info/
   license: MIT
-  min_ansible_version: 2.10
+  min_ansible_version: "2.10"
   platforms:
     - name: Ubuntu
       versions:
@@ -22,10 +22,5 @@ galaxy_info:
         - stretch
         - buster
         - bullseye
-  galaxy_tags:
-    - application
-    - phpfpm
-    - fastcgi
-    - lamp
-    - lemp
+  galaxy_tags: []
 dependencies: []

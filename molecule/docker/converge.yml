@@ -16,9 +16,9 @@
 
     - name: Update and upgrade apt packages
       ansible.builtin.apt:
-        upgrade: no
-        update_cache: yes
-        cache_valid_time: 86400 #One day
+        upgrade: false
+        update_cache: true
+        cache_valid_time: 86400 # One day
       when: ansible_os_family == "Debian"
 
     - name: Install default ubuntu packages
@@ -27,7 +27,7 @@
           - gnupg-agent
           - apt-transport-https
         state: present
-      ignore_errors: true
+      failed_when: false
       when: ansible_os_family == "Debian"
 
 #  roles:
