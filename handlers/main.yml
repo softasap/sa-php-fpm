@@ -1,20 +1,20 @@
 ---
 # handlers file
 
-  - name: restart hhvm
-    ansible.builtin.service:
-      name: phphhvm-fpm
-      state: restarted
-    become: true
-    when: docker_test is not defined
-    tags:
-      - skip_ansible_lint
+- name: restart hhvm
+  ansible.builtin.service:
+    name: phphhvm-fpm
+    state: restarted
+  become: true
+  when: docker_test is not defined
+  tags:
+    - skip_ansible_lint
 
-  - name: restart fpm
-    ansible.builtin.service:
-       name: "php{{ php_fpm_prefix }}-fpm"
-       state: restarted
-    become: true
-    when: docker_test is not defined
-    tags:
-      - skip_ansible_lint
+- name: restart fpm
+  ansible.builtin.service:
+    name: "php{{ php_fpm_prefix }}-fpm"
+    state: restarted
+  become: true
+  when: docker_test is not defined
+  tags:
+    - skip_ansible_lint

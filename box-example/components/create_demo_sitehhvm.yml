@@ -1,17 +1,25 @@
 ---
-  - name: Create demo site folder
-    ansible.builtin.file: path="/var/www/demohhvm" state="directory"
-    become: true
+- name: Create demo site folder
+  ansible.builtin.file:
+    path: "/var/www/demohhvm"
+    state: directory
+    mode: "0755"
+  become: true
 
-  - name: Push demo site contents
-    synchronize: src="{{root_dir}}/files/demosite/" dest="/var/www/demohhvm"
-    become: true
+- name: Push demo site contents
+  synchronize:
+    src: "{{ root_dir }}/files/demosite/"
+    dest: "/var/www/demohhvm"
+  become: true
 
-  - name: Template demosite nginx config
-    ansible.builtin.template: src="{{root_dir}}/templates/nginx/sitehhvm.conf.j2" dest="/etc/nginx/sites-enabled/sitehhvm.conf"
-    dest: /var/www/demohhvm
-    become: true
+- name: Template demosite nginx config
+  ansible.builtin.template:
+    src: "{{ root_dir }}/templates/nginx/sitehhvm.conf.j2"
+    dest: "/etc/nginx/sites-enabled/sitehhvm.conf"
+  become: true
 
-  - name: Restart nginx
-    ansible.builtin.service: name="nginx" state="restarted"
-    become: true
+- name: Restart nginx
+  ansible.builtin.service:
+    name: nginx
+    state: restarted
+  become: true

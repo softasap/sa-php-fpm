@@ -9,7 +9,7 @@
 - name: XDebug | Make temporary directory
   shell: mktemp -d
   register: xdebug_workspace
-  changed_when: False
+  changed_when: false
   tags:
     - xdebug
     - skip_ansible_lint
@@ -24,7 +24,7 @@
 - name: XDebug | Detect ini path
   shell: echo `/usr/bin/php{{ php_version }} -i | grep "Scan this dir for additional .ini files" | awk '{print $(NF)}'`
   register: php_extension_conf_path
-  changed_when: False
+  changed_when: false
   tags:
     - xdebug
     - skip_ansible_lint
@@ -95,7 +95,7 @@
 - name: XDebug | Errors to browser
   ansible.builtin.template:
     src: "{{ role_dir }}/templates/php_debug/devbox.ini.j2"
-    dest: "{{ php_extension_conf_path.stdout.replace('/cli/','/fpm/') }}/devbox.ini"
+    dest: "{{ php_extension_conf_path.stdout.replace('/cli/', '/fpm/') }}/devbox.ini"
     owner: root
     group: root
     mode: "0644"

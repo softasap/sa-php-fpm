@@ -1,80 +1,80 @@
 ---
-  - name: HHVM | get gpg key
-    ansible.builtin.apt_key:
-      url: http://dl.hhvm.com/conf/hhvm.gpg.key
-      state: present
-    become: true
-    tags:
-     - hhvm
+- name: HHVM | get gpg key
+  ansible.builtin.apt_key:
+    url: http://dl.hhvm.com/conf/hhvm.gpg.key
+    state: present
+  become: true
+  tags:
+    - hhvm
 
-  - name: HHVM | add deb repository
-    ansible.builtin.apt_repository:
-      repo: 'deb https://dl.hhvm.com/ubuntu {{ ansible_distribution_release }} main'
-      state: present
-    become: true
-    tags:
-     - hhvm
+- name: HHVM | add deb repository
+  ansible.builtin.apt_repository:
+    repo: 'deb https://dl.hhvm.com/ubuntu {{ ansible_distribution_release }} main'
+    state: present
+  become: true
+  tags:
+    - hhvm
 
-  - name: HHVM | install hhvm packages
-    ansible.builtin.apt:
-      pkg:
-        - hhvm
-      state: present
-      update_cache: yes
-      force: yes
-    become: true
-    notify: restart hhvm
-    tags:
-     - hhvm
+- name: HHVM | install hhvm packages
+  ansible.builtin.apt:
+    pkg:
+      - hhvm
+    state: present
+    update_cache: true
+    force: true
+  become: true
+  notify: restart hhvm
+  tags:
+    - hhvm
 
-  - name: HHVM | get hhvm install path realtime
-    ansible.builtin.command: which hhvm
-    register: hhvm_path
-    changed_when: False
-    tags:
-     - hhvm
+- name: HHVM | get hhvm install path realtime
+  ansible.builtin.command: which hhvm
+  register: hhvm_path
+  changed_when: False
+  tags:
+    - hhvm
 
-  - name: HHVM | Console operations - symlink hhvm as php
-    ansible.builtin.file:
-      src: "{{ hhvm_path.stdout }}"
-      dest: /usr/bin/phphhvm
-      state: link
-    become: true
-    tags:
-     - hhvm
+- name: HHVM | Console operations - symlink hhvm as php
+  ansible.builtin.file:
+    src: "{{ hhvm_path.stdout }}"
+    dest: /usr/bin/phphhvm
+    state: link
+  become: true
+  tags:
+    - hhvm
 
-  - name: FPM | Patch default settings /etc/hhvm/server.ini
-    ansible.builtin.lineinfile:
-      dest: /etc/hhvm/server.ini
-      regexp: "{{ item.regexp }}"
-      line: "{{ item.line }}"
-      insertafter: "{{ item.insertafter | default('EOF') }}"
-    with_items:
-      - regexp: "^[;]?hhvm.server.port *"
-        line: ";hhvm.server.port = 9000"
-      - regexp: "^[;]?hhvm.server.file_socket *"
-        line: "hhvm.server.file_socket = /var/run/hhvm/hhvm.sock"
-        insertafter: "^[;]?hhvm.server.port*"
-    when: php_fpm_listen is defined and php_fpm_listen == "sock"
-    become: true
-    tags:
-     - hhvm
+- name: FPM | Patch default settings /etc/hhvm/server.ini
+  ansible.builtin.lineinfile:
+    dest: /etc/hhvm/server.ini
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    insertafter: "{{ item.insertafter | default('EOF') }}"
+  with_items:
+    - regexp: "^[;]?hhvm.server.port *"
+      line: ";hhvm.server.port = 9000"
+    - regexp: "^[;]?hhvm.server.file_socket *"
+      line: "hhvm.server.file_socket = /var/run/hhvm/hhvm.sock"
+      insertafter: "^[;]?hhvm.server.port*"
+  when: php_fpm_listen is defined and php_fpm_listen == "sock"
+  become: true
+  tags:
+    - hhvm
 
-  - name: HHVM | Template hhvm service
-    ansible.builtin.template:
-      src: "{{ role_dir }}/templates/hhvm/phphhvm-fpm.service.j2"
-      dest: "/etc/systemd/system/phphhvm-fpm.service"
-      mode: "0644"
-    become: true
-    tags:
-     - hhvm
+- name: HHVM | Template hhvm service
+  ansible.builtin.template:
+    src: "{{ role_dir }}/templates/hhvm/phphhvm-fpm.service.j2"
+    dest: "/etc/systemd/system/phphhvm-fpm.service"
+    mode: "0644"
+  become: true
+  tags:
+    - hhvm
 
-  - name: HHVM | Start and enable hhvm fastcgi service
-    ansible.builtin.service:
-      name: "phphhvm-fpm"
-      state: "restarted"
-      enabled: "yes"
-    when: docker_test is not defined
-    become: true
-    tags:
-     - hhvm
+- name: HHVM | Start and enable hhvm fastcgi service
+  ansible.builtin.service:
+    name: "phphhvm-fpm"
+    state: "restarted"
+    enabled: true
+  when: docker_test is not defined
+  become: true
+  tags:
+    - hhvm
