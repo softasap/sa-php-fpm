@@ -30,7 +30,7 @@
 - name: HHVM | get hhvm install path realtime
   ansible.builtin.command: which hhvm
   register: hhvm_path
-  changed_when: False
+  changed_when: false
   tags:
     - hhvm
 

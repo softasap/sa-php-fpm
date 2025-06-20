@@ -16,6 +16,7 @@
   ansible.builtin.template:
     src: "{{ root_dir }}/templates/nginx/sitehhvm.conf.j2"
     dest: "/etc/nginx/sites-enabled/sitehhvm.conf"
+    mode: "0644"
   become: true
 
 - name: Restart nginx
