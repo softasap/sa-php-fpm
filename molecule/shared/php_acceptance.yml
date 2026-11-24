@@ -1,0 +1,76 @@
+---
+# PHP execution acceptance check: request a real PHP page through the
+# php-fpm fastcgi socket and assert the code executes with the exact
+# requested version and core extensions loaded. Included from each
+# scenario's verify.yml (path is relative to the including playbook).
+# Requires php_version_expected to be set by the including playbook.
+
+- name: Acceptance | Ensure www root exists
+  ansible.builtin.file:
+    path: /var/www
+    state: directory
+    owner: root
+    mode: "0755"
+
+- name: Acceptance | Install fastcgi client
+  ansible.builtin.package:
+    name: libfcgi-bin
+    state: present
+  when: ansible_os_family == "Debian"
+
+- name: Acceptance | Deploy php acceptance page
+  ansible.builtin.copy:
+    dest: /var/www/acceptance.php
+    mode: "0644"
+    content: |
+      <?php
+      echo "SA_PHP_FPM_ACCEPTANCE_OK\n";
+      echo "PHP_SAPI=" . php_sapi_name() . "\n";
+      echo "PHP_VERSION=" . PHP_VERSION . "\n";
+      foreach (["curl", "gd", "intl", "mysqli", "pdo_mysql", "pgsql", "pdo_pgsql", "memcached"] as $ext) {
+          echo "EXT_" . $ext . "=" . (extension_loaded($ext) ? "yes" : "no") . "\n";
+      }
+
+- name: Acceptance | Request acceptance page through php-fpm socket
+  ansible.builtin.command:
+    cmd: "cgi-fcgi -bind -connect /run/php/php{{ php_version_expected }}-fpm.sock"
+  environment:
+    SCRIPT_FILENAME: /var/www/acceptance.php
+    REQUEST_METHOD: GET
+  register: php_acceptance
+  changed_when: false
+  retries: 3
+  delay: 2
+  until: php_acceptance.rc == 0
+
+- name: Acceptance | Extract served PHP version
+  ansible.builtin.set_fact:
+    php_served_version: "{{ php_acceptance.stdout | regex_search('PHP_VERSION=([0-9]+\\.[0-9]+\\.[0-9]+)', '\\1') | first }}"
+
+- name: Acceptance | Show acceptance page output
+  ansible.builtin.debug:
+    var: php_acceptance.stdout_lines
+
+- name: Acceptance | Assert PHP is served by fpm-fcgi with the exact requested version
+  ansible.builtin.assert:
+    that:
+      - "'SA_PHP_FPM_ACCEPTANCE_OK' in php_acceptance.stdout"
+      - "'PHP_SAPI=fpm-fcgi' in php_acceptance.stdout"
+      - "php_served_version.split('.')[:2] | join('.') == php_version_expected"
+      - "'EXT_curl=yes' in php_acceptance.stdout"
+      - "'EXT_gd=yes' in php_acceptance.stdout"
+      - "'EXT_intl=yes' in php_acceptance.stdout"
+      - "'EXT_mysqli=yes' in php_acceptance.stdout"
+      - "'EXT_pdo_mysql=yes' in php_acceptance.stdout"
+      - "'EXT_pgsql=yes' in php_acceptance.stdout"
+      - "'EXT_pdo_pgsql=yes' in php_acceptance.stdout"
+      - "'EXT_memcached=yes' in php_acceptance.stdout"
+    success_msg: >-
+      php-fpm serves PHP {{ php_served_version }} (SAPI fpm-fcgi),
+      matching the requested family {{ php_version_expected }}
+    fail_msg: >-
+      php-fpm did not serve the acceptance page correctly —
+      served version {{ php_served_version | default('none') }} (expected
+      family {{ php_version_expected }}), SAPI check failed or core
+      extensions are missing. Output was:
+      {{ php_acceptance.stdout_lines | default([]) }}

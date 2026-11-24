@@ -3,9 +3,9 @@ role_name_check: 1
 driver:
   name: vagrant
   provider:
-    # Can be any supported provider (virtualbox, parallels, libvirt, etc)
-    # Defaults to virtualbox
-    name: virtualbox
+    # libvirt (KVM/QEMU) is the default provider. Any other vagrant-supported
+    # provider (virtualbox, parallels, vmware_desktop, ...) can be used here.
+    name: libvirt
   # Run vagrant up with --provision.
   # Defaults to --no-provision)
   provision: false
@@ -16,26 +16,77 @@ driver:
   # If set to false, set VAGRANT_NO_PARALLEL to '1'
   # Defaults to true - but that can cause issues with multiple machines
   parallel: false
-  default_box: 'ubuntu/jammy64'
+  default_box: 'cloud-image/ubuntu-24.04'
 platforms:
-  - name: ubuntu2204
-    box: ubuntu/jammy64
-    memory: 4096
+  - name: ubuntu2404-php82
+    box: cloud-image/ubuntu-24.04
+    memory: 2048
     cpus: 2
     interfaces:
       - network_name: private_network
         type: dhcp
         auto_config: true
-    instance_raw_config_args:
-      - "vbguest.auto_update = false"   # yamllint disable-line
-      - "disksize.size = '50GB'"
-    provider_raw_config_args:
-      - "customize [ 'modifyvm', :id, '--uartmode1', 'disconnected' ]"
+  - name: ubuntu2404-php83
+    box: cloud-image/ubuntu-24.04
+    memory: 2048
+    cpus: 2
+    interfaces:
+      - network_name: private_network
+        type: dhcp
+        auto_config: true
+  - name: ubuntu2404-php84
+    box: cloud-image/ubuntu-24.04
+    memory: 2048
+    cpus: 2
+    interfaces:
+      - network_name: private_network
+        type: dhcp
+        auto_config: true
+  - name: ubuntu2404-php85
+    box: cloud-image/ubuntu-24.04
+    memory: 2048
+    cpus: 2
+    interfaces:
+      - network_name: private_network
+        type: dhcp
+        auto_config: true
+  - name: debian13
+    box: debian/trixie64
+    memory: 2048
+    cpus: 2
+    interfaces:
+      - network_name: private_network
+        type: dhcp
+        auto_config: true
+
+
 provisioner:
   name: ansible
   log: true
   scenario:
     name: default
+  inventory:
+    host_vars:
+      ubuntu2404-php82:
+        role_under_test: ${MOLECULE_TEST_ROLE:-role_under_test}
+        # Supported PHP line from packages.sury.org
+        php_family: "8.2"
+      ubuntu2404-php83:
+        role_under_test: ${MOLECULE_TEST_ROLE:-role_under_test}
+        # Supported PHP line from packages.sury.org
+        php_family: "8.3"
+      ubuntu2404-php84:
+        role_under_test: ${MOLECULE_TEST_ROLE:-role_under_test}
+        # Supported PHP line from packages.sury.org
+        php_family: "8.4"
+      ubuntu2404-php85:
+        role_under_test: ${MOLECULE_TEST_ROLE:-role_under_test}
+        # Current PHP line from packages.sury.org
+        php_family: "8.5"
+      debian13:
+        role_under_test: ${MOLECULE_TEST_ROLE:-role_under_test}
+        # Distro-provided PHP (trixie ships 8.4), no PPA involved
+        php_family: "default"
   config_options:
     defaults:
       allow_world_readable_tmpfiles: true

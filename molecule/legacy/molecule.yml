@@ -1,0 +1,117 @@
+# Legacy PHP families, officially EOL but maintained with security
+# backports by packages.sury.org (successor of ppa:ondrej/php).
+# Same shape as the default scenario; run with: make molecule-legacy
+role_name_check: 1
+driver:
+  name: vagrant
+  provider:
+    # libvirt (KVM/QEMU) is the default provider. Any other vagrant-supported
+    # provider (virtualbox, parallels, vmware_desktop, ...) can be used here.
+    name: libvirt
+  provision: false
+  cachier: machine
+  parallel: false
+  default_box: 'cloud-image/ubuntu-24.04'
+platforms:
+  - name: ubuntu2404-php56
+    box: cloud-image/ubuntu-24.04
+    memory: 2048
+    cpus: 2
+    interfaces:
+      - network_name: private_network
+        type: dhcp
+        auto_config: true
+  - name: ubuntu2404-php70
+    box: cloud-image/ubuntu-24.04
+    memory: 2048
+    cpus: 2
+    interfaces:
+      - network_name: private_network
+        type: dhcp
+        auto_config: true
+  - name: ubuntu2404-php71
+    box: cloud-image/ubuntu-24.04
+    memory: 2048
+    cpus: 2
+    interfaces:
+      - network_name: private_network
+        type: dhcp
+        auto_config: true
+  - name: ubuntu2404-php72
+    box: cloud-image/ubuntu-24.04
+    memory: 2048
+    cpus: 2
+    interfaces:
+      - network_name: private_network
+        type: dhcp
+        auto_config: true
+  - name: ubuntu2404-php73
+    box: cloud-image/ubuntu-24.04
+    memory: 2048
+    cpus: 2
+    interfaces:
+      - network_name: private_network
+        type: dhcp
+        auto_config: true
+  - name: ubuntu2404-php74
+    box: cloud-image/ubuntu-24.04
+    memory: 2048
+    cpus: 2
+    interfaces:
+      - network_name: private_network
+        type: dhcp
+        auto_config: true
+  - name: ubuntu2404-php80
+    box: cloud-image/ubuntu-24.04
+    memory: 2048
+    cpus: 2
+    interfaces:
+      - network_name: private_network
+        type: dhcp
+        auto_config: true
+  - name: ubuntu2404-php81
+    box: cloud-image/ubuntu-24.04
+    memory: 2048
+    cpus: 2
+    interfaces:
+      - network_name: private_network
+        type: dhcp
+        auto_config: true
+
+
+provisioner:
+  name: ansible
+  log: true
+  scenario:
+    name: legacy
+  inventory:
+    host_vars:
+      ubuntu2404-php56:
+        role_under_test: ${MOLECULE_TEST_ROLE:-role_under_test}
+        php_family: "5.6"
+      ubuntu2404-php70:
+        role_under_test: ${MOLECULE_TEST_ROLE:-role_under_test}
+        php_family: "7.0"
+      ubuntu2404-php71:
+        role_under_test: ${MOLECULE_TEST_ROLE:-role_under_test}
+        php_family: "7.1"
+      ubuntu2404-php72:
+        role_under_test: ${MOLECULE_TEST_ROLE:-role_under_test}
+        php_family: "7.2"
+      ubuntu2404-php73:
+        role_under_test: ${MOLECULE_TEST_ROLE:-role_under_test}
+        php_family: "7.3"
+      ubuntu2404-php74:
+        role_under_test: ${MOLECULE_TEST_ROLE:-role_under_test}
+        php_family: "7.4"
+      ubuntu2404-php80:
+        role_under_test: ${MOLECULE_TEST_ROLE:-role_under_test}
+        php_family: "8.0"
+      ubuntu2404-php81:
+        role_under_test: ${MOLECULE_TEST_ROLE:-role_under_test}
+        php_family: "8.1"
+  config_options:
+    defaults:
+      allow_world_readable_tmpfiles: true
+      callback_whitelist: profile_roles,profile_tasks,timer
+      ansible_python_interpreter: /usr/bin/python3

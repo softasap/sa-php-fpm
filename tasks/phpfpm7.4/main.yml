@@ -1,0 +1,32 @@
+- name: FPM | Install base fpm package module
+  ansible.builtin.package:
+    name: "{{ php_fpm_prefix }}-fpm"
+    state: present
+  become: true
+  notify: Restart fpm
+  tags:
+    - phpfpm
+
+- name: FPM | Patch default settings /etc/php/7.4/fpm/pool.d/www.conf
+  ansible.builtin.lineinfile:
+    dest: /etc/php/7.4/fpm/pool.d/www.conf
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    insertafter: "{{ item.insertafter | default('EOF') }}"
+  loop: "{{ default_pool_properties | default([]) }}"
+  become: true
+  notify: Restart fpm
+  tags:
+    - phpfpm
+
+- name: FPM | Patch custom settings /etc/php/7.4/fpm/pool.d/www.conf
+  ansible.builtin.lineinfile:
+    dest: /etc/php/7.4/fpm/pool.d/www.conf
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    insertafter: "{{ item.insertafter | default('EOF') }}"
+  loop: "{{ custom_pool_properties | default([]) }}"
+  become: true
+  notify: Restart fpm
+  tags:
+    - phpfpm

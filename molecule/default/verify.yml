@@ -1,0 +1,80 @@
+---
+# sa-php-fpm verify playbook. Runs as part of `molecule test` after
+# converge + idempotence. "default" php_family resolves to 8.4.
+- name: Verify role under test
+  hosts: all
+  gather_facts: true
+  become: true
+  tasks:
+    - name: Verify | Display role under test
+      ansible.builtin.debug:
+        var: role_under_test
+
+    - name: Verify | Resolve expected PHP version
+      ansible.builtin.set_fact:
+        php_version_expected: "{{ '8.4' if (php_family | default('default')) == 'default' else php_family }}"
+
+    - name: Verify | Gather package facts
+      ansible.builtin.package_facts:
+        manager: auto
+
+    - name: Verify | Assert php-fpm package present
+      ansible.builtin.assert:
+        that:
+          - "'php{{ php_version_expected }}-fpm' in ansible_facts.packages"
+        fail_msg: "php{{ php_version_expected }}-fpm is not installed"
+
+    - name: Verify | Assert core extension packages present
+      ansible.builtin.assert:
+        that:
+          - "'php{{ php_version_expected }}-mysql' in ansible_facts.packages"
+          - "'php{{ php_version_expected }}-pgsql' in ansible_facts.packages"
+          - "'php{{ php_version_expected }}-memcached' in ansible_facts.packages"
+          - "'php{{ php_version_expected }}-curl' in ansible_facts.packages"
+          - "'php{{ php_version_expected }}-gd' in ansible_facts.packages"
+        fail_msg: "core php{{ php_version_expected }} extensions are not installed"
+
+    - name: Verify | Stat fpm pool config
+      ansible.builtin.stat:
+        path: "/etc/php/{{ php_version_expected }}/fpm/pool.d/www.conf"
+      register: fpm_pool_conf
+
+    - name: Verify | Assert fpm pool config exists
+      ansible.builtin.assert:
+        that:
+          - fpm_pool_conf.stat.exists
+        fail_msg: "/etc/php/{{ php_version_expected }}/fpm/pool.d/www.conf is missing"
+
+    - name: Verify | Gather service facts
+      ansible.builtin.service_facts:
+
+    - name: Verify | Assert php-fpm service is running
+      ansible.builtin.assert:
+        that:
+          - "ansible_facts.services['php' ~ php_version_expected ~ '-fpm.service'] is defined"
+          - "ansible_facts.services['php' ~ php_version_expected ~ '-fpm.service'].state == 'running'"
+        fail_msg: "php{{ php_version_expected }}-fpm is not running"
+
+    - name: Verify | Stat composer binary
+      ansible.builtin.stat:
+        path: /usr/local/bin/composer
+      register: composer_binary
+
+    - name: Verify | Assert composer binary present
+      ansible.builtin.assert:
+        that:
+          - composer_binary.stat.exists
+        fail_msg: "composer is not installed (option_install_composer defaults to true)"
+
+    - name: Verify | Report php-fpm version
+      ansible.builtin.command:
+        cmd: "/usr/sbin/php-fpm{{ php_version_expected }} -v"
+      changed_when: false
+      register: php_fpm_version
+
+    - name: Verify | Show php-fpm version
+      ansible.builtin.debug:
+        var: php_fpm_version.stdout_lines
+
+    - name: Verify | Run PHP execution acceptance checks
+      ansible.builtin.include_tasks: ../shared/php_acceptance.yml

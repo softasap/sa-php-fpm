@@ -13,7 +13,7 @@ php_fpm_group: www-data
 
 php_fpm_listen: sock # tcp 9000 to support. and both
 
-php_family: default # 5.4 | 5.5 | 5.6 | 7.0 | ... 8.4 default
+php_family: default # 5.6 | 7.0 ... 7.4 | 8.0 ... 8.5 | hhvm | default
 
 php_module_prefix: php
 php_fpm_prefix: php
@@ -21,15 +21,19 @@ php_fpm_prefix: php
 pkg_dependencies_core:
   - git
   - curl
-  - libmysqlclient-dev
+  - default-libmysqlclient-dev
   - unzip
 
 pkg_dependencies: []
 
+# php-xmlrpc was dropped from the core list: the extension is not
+# packaged for PHP 8.4 (removed upstream). Add it via php_extensions
+# when running PHP <= 8.3 from packages.sury.org.
 php_extensions_core:
   - "{{ php_module_prefix }}-mysql"
+  - "{{ php_module_prefix }}-pgsql"
+  - "{{ php_module_prefix }}-memcached"
   - "{{ php_module_prefix }}-intl"
-  - "{{ php_module_prefix }}-xmlrpc"
   - "{{ php_module_prefix }}-curl"
   - "{{ php_module_prefix }}-gd"
 

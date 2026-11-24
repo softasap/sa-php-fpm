@@ -1,9 +1,14 @@
 sa-php-fpm
 ==========
-[![Build Status](https://travis-ci.org/softasap/sa-php-fpm.svg?branch=master)](https://travis-ci.org/softasap/sa-php-fpm)
+[![CI](https://github.com/softasap/sa-php-fpm/actions/workflows/ci.yml/badge.svg)](https://github.com/softasap/sa-php-fpm/actions/workflows/ci.yml)
 
 
 Basic role for php-fpm install, optional pre-configured xdebug support, optional global composer installation as composer{{php_version}}
+
+On Ubuntu, non-default and older PHP families (5.6, 7.x, 8.x) are installed from
+[packages.sury.org](https://packages.sury.org/php/) (successor of the deprecated
+`ppa:ondrej/php`); on Debian the
+distro-provided PHP is used (`php_family: default`).
 
 
 Example of usage:
@@ -42,19 +47,16 @@ see box-example for full featured lamp install.
          php_fpm_group: www-data,
 
          php_fpm_listen: sock, # tcp 9000 to support. and both
-         php_family: default, #  5.6 | 7.0 | hhvm | default
+         php_family: default, #  5.6 | 7.0 ... 7.4 | 8.0 ... 8.5 | hhvm | default
 
          pkg_dependencies:
            - git
            - curl
-           - python-dev
-           - libmysqlclient-dev
            - unzip
 
          php_extensions:
            - "{{php_module_prefix}}-mysql"
            - "{{php_module_prefix}}-intl"
-           - "{{php_module_prefix}}-xmlrpc"
            - "{{php_module_prefix}}-curl"
            - "{{php_module_prefix}}-gd"
 

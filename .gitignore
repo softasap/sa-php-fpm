@@ -10,3 +10,12 @@ __pycache__/
 .cache
 .aid*
 .ansible
+.agents/
+.codegraph/
+.commandcode/
+auto-patch.sh
+.claude/
+.kilo/
+.opencode/
+CONVENTIONS.md
+FIX_PLAN.md

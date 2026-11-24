@@ -3,21 +3,30 @@
   hosts: all
 
   pre_tasks:
-    - ansible.builtin.debug: msg="Pre tasks section for {{ ansible_host }}"
+    - name: Display role under test
+      ansible.builtin.debug:
+        var: role_under_test
 
-    - name: set default facts
+    - name: Display PHP family under test
+      ansible.builtin.debug:
+        var: php_family
+
+    - name: Pre tasks debug
+      ansible.builtin.debug:
+        msg: "Pre tasks section for {{ ansible_host }}"
+
+    - name: Set default facts
       ansible.builtin.set_fact:
         remote_ip_address: "{{ ansible_host }}"
 
     - name: Include default vars
-      ansible.builtin.include_vars: "vars/playbook_vars.yml"
+      ansible.builtin.include_vars:
+        file: "vars/molecule_vars.yml"
 
-  roles:
-    - role: "sa-apache"
-    - role: "sa-php-fpm"
-      vars:
-        php_family: "8.3"
+  tasks:
+    - name: Apply role under test
+      ansible.builtin.include_role:
+        name: "{{ role_under_test }}"
 
-#- name: Apply box play
-#  import_playbook: ../../playbook.yml
-
+  # - name: Apply box play
+  #   ansible.builtin.import_playbook: ../../playbook.yml
