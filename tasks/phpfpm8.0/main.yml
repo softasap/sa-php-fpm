@@ -3,6 +3,7 @@
     name: "{{ php_fpm_prefix }}-fpm"
     state: present
   become: true
+  notify: Restart fpm
   tags:
     - phpfpm
 
@@ -12,8 +13,9 @@
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
     insertafter: "{{ item.insertafter | default('EOF') }}"
-  with_items: "{{ default_pool_properties | default([]) }}"
+  loop: "{{ default_pool_properties | default([]) }}"
   become: true
+  notify: Restart fpm
   tags:
     - phpfpm
 
@@ -23,25 +25,8 @@
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
     insertafter: "{{ item.insertafter | default('EOF') }}"
-  with_items: "{{ custom_pool_properties | default([]) }}"
+  loop: "{{ custom_pool_properties | default([]) }}"
   become: true
-  tags:
-    - phpfpm
-
-- name: FPM | Stop fpm service if custom pool properties exist
-  ansible.builtin.service:
-    name: "php8.0-fpm"
-    state: stopped
-  when: custom_pool_properties is defined
-  become: true
-  tags:
-    - phpfpm
-
-- name: FPM | Restart fpm service
-  ansible.builtin.service:
-    name: "php8.0-fpm"
-    state: restarted
-  when: docker_test is not defined
-  become: true
+  notify: Restart fpm
   tags:
     - phpfpm

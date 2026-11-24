@@ -30,7 +30,7 @@ repos:
         # https://ansible-lint.readthedocs.io/en/latest/default_rules.html
         verbose: true
         # plugins is the standard collection dir for modules
-        entry: env ANSIBLE_LIBRARY=plugins ansible-lint --force-color -p -v -c ./.ansible-lint
+        entry: env ANSIBLE_LIBRARY=plugins ansible-lint --force-color -p -v .
         additional_dependencies:
           - 'ansible>11,<12'
   - repo: https://github.com/openstack-dev/bashate.git
