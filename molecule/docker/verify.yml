@@ -1,5 +1,5 @@
 ---
-# Docker scenario verify for sa-php-fpm. Same shape as
+# Docker scenario verify for sa_php_fpm. Same shape as
 # molecule/default/verify.yml but WITHOUT service assertions —
 # the role skips service restarts when docker_test is defined and
 # containers may lack systemd as PID 1.
