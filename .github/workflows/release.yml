@@ -40,3 +40,22 @@ jobs:
           --api-key ${{ secrets.GALAXY_API_KEY }}
           $(echo ${{ github.repository }} | cut -d/ -f1)
           $(echo ${{ github.repository }} | cut -d/ -f2)
+
+      - name: Refresh legacy dashed role name if present.
+        run: |
+          ROLE_NAME=$(grep -E '^\s*role_name:' role_under_test/meta/main.yml | awk '{print $2}')
+          LEGACY_NAME=$(echo "$ROLE_NAME" | tr '_' '-')
+          NAMESPACE=$(echo "${{ github.repository }}" | cut -d/ -f1)
+          if [ "$LEGACY_NAME" = "$ROLE_NAME" ]; then
+            echo "role name has no dashed variant ($ROLE_NAME); skipping legacy refresh."
+            exit 0
+          fi
+          COUNT=$(python3 -c "import json,urllib.request; print(json.load(urllib.request.urlopen('https://galaxy.ansible.com/api/v1/roles/?owner__username=${NAMESPACE}&name=${LEGACY_NAME}')).get('count', 0))")
+          if [ "$COUNT" -gt 0 ]; then
+            echo "legacy role ${NAMESPACE}.${LEGACY_NAME} exists; refreshing."
+            ansible-galaxy role import --role-name "$LEGACY_NAME" \
+              --api-key ${{ secrets.GALAXY_API_KEY }} \
+              "$NAMESPACE" "$(echo ${{ github.repository }} | cut -d/ -f2)"
+          else
+            echo "legacy role ${NAMESPACE}.${LEGACY_NAME} not found; skipping."
+          fi
