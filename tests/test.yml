@@ -1,9 +1,10 @@
 ---
 # Legacy direct-playbook test entry point (not used by molecule).
 # The role name is never hardcoded: pass it via extra vars, e.g.
-#   ansible-playbook -i inventory -e role_under_test=sa-php-fpm tests/test.yml
+#   ansible-playbook -i inventory -e role_under_test=sa_php_fpm tests/test.yml
 # Molecule scenarios use include_role the same way (see molecule/*/converge.yml).
-- hosts: all
+- name: Test role under test
+  hosts: all
   vars:
     ansible_python_interpreter: auto
 

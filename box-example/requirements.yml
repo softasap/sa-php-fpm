@@ -1,7 +1,7 @@
 - src: softasap.sa-nginx
   name: sa-nginx
-- src: softasap.sa-php-fpm
-  name: sa-php-fpm
+- src: softasap.sa_php_fpm
+  name: sa_php_fpm
 - src: softasap.sa-apache
   name: sa-apache
 - src: softasap.sa-mysql

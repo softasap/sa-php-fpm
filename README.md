@@ -1,4 +1,4 @@
-sa-php-fpm
+sa_php_fpm
 ==========
 [![CI](https://github.com/softasap/sa-php-fpm/actions/workflows/ci.yml/badge.svg)](https://github.com/softasap/sa-php-fpm/actions/workflows/ci.yml)
 
@@ -18,7 +18,7 @@ Simple
 ```YAML
 
      - {
-         role: "sa-php-fpm"
+         role: "sa_php_fpm"
        }
 
 
@@ -31,7 +31,7 @@ see box-example for full featured lamp install.
 ```YAML
 
      - {
-         role: "sa-php-fpm",
+         role: "sa_php_fpm",
          option_install_xdebug: true,
          php_xdebug_version: 2.5.5,
          xdebug_remote_enable: 1
@@ -75,20 +75,20 @@ see box-example for full featured lamp install.
 Usage with ansible galaxy workflow
 ----------------------------------
 
-If you installed the `sa-php-fpm` role using the command
+If you installed the `sa_php_fpm` role using the command
 
 
 `
-   ansible-galaxy install softasap.sa-php-fpm
+   ansible-galaxy install softasap.sa_php_fpm
 `
 
-the role will be available in the folder `library/softasap.sa-php-fpm`
+the role will be available in the folder `library/softasap.sa_php_fpm`
 Please adjust the path accordingly.
 
 ```YAML
 
      - {
-         role: "softasap.sa-php-fpm"
+         role: "softasap.sa_php_fpm"
        }
 
 ```

@@ -1,5 +1,5 @@
 ---
-# defaults file for sa-php-fpm
+# defaults file for sa_php_fpm
 
 role_dir: "{{ role_path }}"
 

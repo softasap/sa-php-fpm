@@ -1,5 +1,5 @@
 ---
-# tasks file for sa-php-fpm
+# tasks file for sa_php_fpm
 - name: PHP | Persist docker test flag for handler scope
   ansible.builtin.set_fact:
     docker_test: "{{ docker_test | default(false) | bool }}"

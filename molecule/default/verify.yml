@@ -1,5 +1,5 @@
 ---
-# sa-php-fpm verify playbook. Runs as part of `molecule test` after
+# sa_php_fpm verify playbook. Runs as part of `molecule test` after
 # converge + idempotence. "default" php_family resolves to 8.4.
 - name: Verify role under test
   hosts: all
